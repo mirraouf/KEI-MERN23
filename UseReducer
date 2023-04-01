@@ -1,0 +1,84 @@
+import { useReducer } from 'react';
+
+function Contact() {
+
+  const reducer = (state, action) => {
+    if (action.type === 'increment-count') {
+      return {
+        ...state,
+        count: state.count + 1
+      };
+    }
+    if (action.type === 'decrement-count') {
+      return {
+        ...state,
+        count: state.count - 1
+      };
+    }
+    if (action.type === 'update-value') {
+      return {
+        ...state,
+        valueToAdd: action.payload
+      };
+    }
+      if (action.type === 'change-value') {
+        return {
+          ...state,
+          count: state.count + state.valueToAdd
+        };
+      }
+
+    }
+  
+  const [state, dispatch] = useReducer(reducer, {
+    count: 0,
+    valueToAdd: 0
+  });
+
+  const increment = () => {
+
+    dispatch({ type: 'increment-count' });
+  };
+  const decrement = () => {
+    dispatch({ type: 'decrement-count' });
+  };
+
+  const handleChange = (event) => {
+    console.log(typeof event.target.value);
+    const value = parseInt(event.target.value) || 0;
+    dispatch({
+      type: 'update-value',
+      payload: value
+    });
+  };
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      dispatch({
+        type: 'change-value'
+      });
+
+    };
+
+    return (
+      <div>
+        <h1 >Count is {state.count}</h1>
+        <div >
+          <button onClick={increment}>Increment</button>
+          <button onClick={decrement}>Decrement</button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <label>Add a lot!</label>
+          <input
+            value={state.valueToAdd || ''}
+            onChange={handleChange}
+            type="number"
+          />
+          <button>Add it!</button>
+        </form>
+      </div>
+    );
+  
+  };
+  export default Contact;
